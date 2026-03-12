@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        agp_version = '7.1.1'
+    }
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+        maven {
+            url "https://google.maven.com"
+        }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$agp_version"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+// >> GIT_ALL_IN_ONE:startApi
+tasks.register('startApi', Exec) {
+    workingDir = rootProject.projectDir
+    def os = org.gradle.internal.os.OperatingSystem.current()
+    if (os.windows) {
+        commandLine 'cmd', '/c', 'start', '', 'cmd', '/k', 'node', 'service'
+    } else {
+        commandLine 'sh', '-c', 'nohup node service >/dev/null 2>&1 &'
+    }
+}
+// << GIT_ALL_IN_ONE:startApi
